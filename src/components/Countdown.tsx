@@ -1,8 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { ChallengesContext } from '../contexts/ChallengesContext';
 import styles from '../styles/components/Countdown.module.css';
 
+let countdownTimeout : NodeJS.Timeout; //resolve o problema de demora de 1 segundo para parar o countdown
+
 export function Countdown(){
-  var countdownTimeout : NodeJS.Timeout; //resolve o problema de demora de 1 segundo para parar o countdown
+
+  const  {startNewChallenge} = useContext(ChallengesContext);
 
   const [time, setTime] = useState(0.1 * 60); //cria o use state para em segundos
   const [isActive, setActive ] = useState(false); //inicia o estado como faço para as variaveis ativas e inativas
@@ -36,6 +40,7 @@ export function Countdown(){
       console.log('finalizou');
       setHasFinished(true);
       setActive(false);
+      startNewChallenge();
     }
   }, [isActive, time])
  
