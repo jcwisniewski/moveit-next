@@ -1,4 +1,4 @@
-import {createContext, ReactNode, useContext, useState} from 'react';
+import {createContext, ReactNode, useContext, useEffect, useState} from 'react';
 import challenges from '../../challenges.json';
 import { CountdownContext } from './CountdownContext';
 
@@ -37,7 +37,12 @@ export function ChallengesProvider({children}: ChallengesProviderProps){
   const [challengeCompleted, setChallengeCompleted] = useState(0);
   const [activeChallenge, setActiveChallenge] = useState(null);
 
-  const experienceToNextLevel = Math.pow((level + 1) * 4, 2)
+  const experienceToNextLevel = Math.pow((level + 1) * 4, 2);
+
+  useEffect (() => {
+    Notification.requestPermission();
+    
+  },[])
 
   function levelUp(){
     setLevel(level + 1);
@@ -45,12 +50,24 @@ export function ChallengesProvider({children}: ChallengesProviderProps){
   }
 
   function startNewChallenge(){
+
+
     console.log('starting a new challenge');
     const randomChallengeIndex = Math.floor(Math.random() * challenges.length)
     const challenge = challenges[randomChallengeIndex];
     setActiveChallenge(challenge);
 
-  }
+  
+
+    new Audio('/notification.mp3').play();
+
+    if(Notification.permission === 'granted') {
+        new Notification('Novo desafio!', {
+          body:`Valendo ${challenge.amount} xp!` 
+        })
+      } 
+
+    }
 
   function resetChallenge(){
     setActiveChallenge(null);
@@ -73,6 +90,7 @@ export function ChallengesProvider({children}: ChallengesProviderProps){
     setCurrentExperience(finalExperience);
     setActiveChallenge(null);
     setChallengeCompleted(challengeCompleted + 1);
+    new Audio('/completed.mp3').play();
   }
 
   

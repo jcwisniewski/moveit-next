@@ -9,7 +9,8 @@ export function ChallengeBox(){
   const {disableCountdown} = useContext(CountdownContext);
   
  function  handleChallengeFailed(){
-  
+  //necessário criar uma nova função para chamar
+  //mais de uma função no botão
   resetChallenge();
   disableCountdown();
   
