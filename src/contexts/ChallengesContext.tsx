@@ -2,6 +2,7 @@ import {createContext, ReactNode, useContext, useEffect, useState} from 'react';
 import challenges from '../../challenges.json';
 import { ModalBox } from '../components/ModalBox';
 import { CountdownContext } from './CountdownContext';
+import Cookies from 'js-cookie';
 
 interface Challenge {
   type: 'body' | 'eye',
@@ -44,8 +45,16 @@ export function ChallengesProvider({children}: ChallengesProviderProps){
 
   useEffect (() => {
     Notification.requestPermission();
-    
+
+
   },[])
+
+  useEffect(() => {
+    Cookies.set('level', String(level))
+    Cookies.set('currentExperience', String(currentExperience))
+    Cookies.set('challengeCompleted', String(challengeCompleted))
+
+  },[level, currentExperience, challengeCompleted])
 
   function levelUp(){
     setLevel(level + 1);
