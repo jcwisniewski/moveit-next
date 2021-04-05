@@ -1,6 +1,8 @@
 import {createContext, ReactNode, useContext, useEffect, useState} from 'react';
 import challenges from '../../challenges.json';
+import { ModalBox } from '../components/ModalBox';
 import { CountdownContext } from './CountdownContext';
+import Cookies from 'js-cookie';
 
 interface Challenge {
   type: 'body' | 'eye',
@@ -18,6 +20,7 @@ interface ChallengesContextData{
   startNewChallenge: () => void;
   resetChallenge: () => void;
   completeChallenge: () => void;
+  closeModalBox: () => void;
 
 }
 
@@ -36,16 +39,27 @@ export function ChallengesProvider({children}: ChallengesProviderProps){
   const [currentExperience, setCurrentExperience] = useState(0);
   const [challengeCompleted, setChallengeCompleted] = useState(0);
   const [activeChallenge, setActiveChallenge] = useState(null);
+  const [isModalBoxOpen, setIsModalBoxOpen] = useState(false);
 
   const experienceToNextLevel = Math.pow((level + 1) * 4, 2);
 
   useEffect (() => {
     Notification.requestPermission();
-    
+
+
   },[])
+
+  useEffect(() => {
+    Cookies.set('level', String(level))
+    Cookies.set('currentExperience', String(currentExperience))
+    Cookies.set('challengeCompleted', String(challengeCompleted))
+
+  },[level, currentExperience, challengeCompleted])
 
   function levelUp(){
     setLevel(level + 1);
+    setIsModalBoxOpen(true);
+
     
   }
 
@@ -93,6 +107,10 @@ export function ChallengesProvider({children}: ChallengesProviderProps){
     new Audio('/completed.mp3').play();
   }
 
+  function closeModalBox(){
+    setIsModalBoxOpen(false);
+  }
+
   
   return(
     <ChallengesContext.Provider value={{level,
@@ -104,9 +122,11 @@ export function ChallengesProvider({children}: ChallengesProviderProps){
     activeChallenge,
     resetChallenge,
     completeChallenge,
+    closeModalBox,
     
     }}>
       {children}
+      {isModalBoxOpen && <ModalBox/>}
     </ChallengesContext.Provider>
   );
 }
