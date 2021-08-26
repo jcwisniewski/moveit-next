@@ -26,7 +26,7 @@ export function CountdownContextProvider ({children}: CountdownContextProps){
   
   
 
-  const [time, setTime] = useState(0.1 * 60); //cria o use state para em segundos
+  const [time, setTime] = useState(25 * 60); //cria o use state para em segundos
   const [isActive, setActive ] = useState(false); //inicia o estado como faço para as variaveis ativas e inativas
   const [hasFinished, setHasFinished] = useState(false);
 
@@ -41,7 +41,7 @@ export function CountdownContextProvider ({children}: CountdownContextProps){
   function disableCountdown(){
     clearTimeout(countdownTimeout);
     setActive(false); //para o countdown
-    setTime(0.1 * 60); //reserta o countdown
+    setTime(25* 60); //reserta o countdown
     setHasFinished(false);
   }
 
